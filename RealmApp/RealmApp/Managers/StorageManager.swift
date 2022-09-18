@@ -14,7 +14,7 @@ class StorageManager {
     static func deleteAll() {
         do {
             try realm.write {
-                realm.deleteAll() // удаление все обьетов из базы данных
+                realm.deleteAll()
             }
         } catch {
             print("deleteAll error: \(error)")
@@ -22,7 +22,7 @@ class StorageManager {
     }
     
     static func getAllTasksLists() -> Results<TasksList> {
-        realm.objects(TasksList.self)
+        realm.objects(TasksList.self)//.sorted(byKeyPath: "name")
     }
     
     static func saveTasksList(tasksList: TasksList) {
@@ -57,7 +57,7 @@ class StorageManager {
                 complition()
             }
         } catch {
-            print("editList error")
+            print("editList error: \(error)")
         }
     }
 
@@ -69,8 +69,31 @@ class StorageManager {
         } catch {
             print("makeAllDone error: \(error)")
         }
+    }
+
+
+    static func saveTask(_ tasksList: TasksList, task: Task) {
         try! realm.write {
-            tasksList.tasks.setValue(true, forKey: "isComplete")
+            tasksList.tasks.append(task)
+        }
+    }
+
+    static func editTask(_ task: Task, newNameTask: String, newNote: String) {
+        try! realm.write {
+            task.name = newNameTask
+            task.note = newNote
+        }
+    }
+
+    static func deleteTask(_ task: Task) {
+        try! realm.write {
+            realm.delete(task)
+        }
+    }
+
+    static func makeDone(_ task: Task) {
+        try! realm.write {
+            task.isComplete.toggle()
         }
     }
 }
