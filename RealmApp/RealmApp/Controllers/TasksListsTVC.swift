@@ -51,8 +51,23 @@ class TasksListsTVC: UITableViewController {
         cell.configure(with: tasksList)
         return cell
     }
-
-
+// анимация
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        let degree : Double = 90
+//        let rotationAngle = CGFloat(degree * M_PI / 100)
+//        let rotationTransform = CATransform3DMakeRotation(rotationAngle, 1, 0, 0)
+//        cell.layer.transform = rotationTransform
+//        UIView.animate(withDuration: 1, delay: 0.2 * Double(indexPath.row), options: .curveEaseOut, animations: {
+//            cell.layer.transform = CATransform3DIdentity
+//        })
+        let traslationTransform = CATransform3DTranslate(CATransform3DIdentity, -500, 400, 0)
+        cell.layer.transform = traslationTransform
+        UIView.animate(withDuration: 1, delay: 0.5 * Double(indexPath.row), options: .curveEaseOut, animations: {
+            cell.layer.transform = CATransform3DIdentity
+        })
+    }
+    
+    
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
     
         return true
